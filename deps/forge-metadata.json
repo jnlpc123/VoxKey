@@ -1,0 +1,17 @@
+{
+  "name": "node-forge",
+  "version": "1.4.0",
+  "dist": {
+    "shasum": "1c7b7d8bdc2d078739f58287d589d903a11b2fc2",
+    "tarball": "https://registry.npmjs.org/node-forge/-/node-forge-1.4.0.tgz",
+    "fileCount": 59,
+    "integrity": "sha512-LarFH0+6VfriEhqMMcLX2F7SwSXeWwnEAJEsYm5QKWchiVYVvJyV9v7UDvUv+w5HO23ZpQTXDv/GxdDdMyOuoQ==",
+    "signatures": [
+      {
+        "sig": "MEQCIHN+qilMnh4W7N6nrRE5KXZgu26uSkmTfjPiujxr0qAvAiB2zOy5/OdnRK68PHo2WfVDpoLCo8PgFJ5pyBuWqNUO9A==",
+        "keyid": "SHA256:DhQ8wR5APBvFHLF/+Tc+AYvPOdTpcIDqOhxsBHRwC7U"
+      }
+    ],
+    "unpackedSize": 1647637
+  }
+}

@@ -1,0 +1,8 @@
+build/
+test-build/
+*.jks
+*.keystore
+*.apk
+*.apk.idsig
+assets-fast/model/model.int8.ort
+.download-cache/
