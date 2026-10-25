@@ -10,3 +10,6 @@ assets-fast/model/tokens.txt -text
 *.jar -text
 *.so -text
 *.ort -text
+
+*.sh text eol=lf
+sony/app/assets-fast/model/tokens.txt -text
