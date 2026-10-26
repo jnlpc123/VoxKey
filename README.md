@@ -16,6 +16,10 @@
 
 当贝 F5 1.0.0 已在 Android 9、ARMv7 实测。另有 [索尼 1.0.2 专用恢复版](sony/README.md)：保留原系统助手，辅助程序无运行时限，并支持电视本机 ADB 自动恢复；[下载 1.0.2](https://github.com/jnlpc123/VoxKey/releases/tag/v1.0.2)。根目录保留 F5 稳定版源码，索尼版源码见 `sony/`。其他机型未经验证。
 
+## 当贝 F5 关机后输入法回退修复
+
+如果 F5 正常关机再开机后回到搜狗，或 VoxKey 语音键服务被关闭，可安装独立的 [F5 恢复助手](f5-recovery/README.md)。它在开机／唤醒后恢复 VoxKey，保留本次使用中主动切换普通输入法的选择，不修改原桌面。[下载恢复助手 1.0](https://github.com/jnlpc123/VoxKey/releases/tag/f5-recovery-v1.0.0)。这不是索尼版安装包，需先安装 VoxKey 本体。
+
 ## 使用
 
 1. 安装 APK，在系统设置启用 **VoxKey 输入法**、授予麦克风权限。
