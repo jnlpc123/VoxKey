@@ -1,0 +1,7 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="app.codex.f5voice" android:versionCode="104" android:versionName="1.0.4-migration">
+ <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="28"/>
+ <permission android:name="app.codex.f5voice.permission.MIGRATE_SETTINGS" android:protectionLevel="signature"/>
+ <application android:label="VoxKey 迁移工具" android:debuggable="false" android:allowBackup="false">
+  <provider android:name=".MigrationProvider" android:authorities="app.codex.f5voice.migration" android:exported="true" android:permission="app.codex.f5voice.permission.MIGRATE_SETTINGS"/>
+ </application>
+</manifest>

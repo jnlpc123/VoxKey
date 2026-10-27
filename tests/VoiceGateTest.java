@@ -1,4 +1,4 @@
-package app.codex.f5voice;
+package app.codex.f5voice.compat.com.android.integrated;
 public class VoiceGateTest {
  static int n;
  static void check(boolean b,String message){if(!b)throw new AssertionError(message);n++;}

@@ -12,4 +12,3 @@ assets-fast/model/tokens.txt -text
 *.ort -text
 
 *.sh text eol=lf
-sony/app/assets-fast/model/tokens.txt -text

@@ -1,84 +1,83 @@
 # VoxKey
 
-为当贝 F5 遥控器设计的 Android TV 语音输入法：按住语音键说话，松开填入当前输入框。
+Android TV 语音输入法：按住遥控器语音键说话，松开填入当前输入框。仅在输入框与 VoxKey 面板激活时接管，密码框不录音，其他场景保留系统语音助手。
 
-- **本地离线**：SenseVoice int8 ORT，在设备端识别。
-- **可选云端**：百炼 Paraformer-realtime-v2；通过手机扫码配置 API Key。
-- **编辑工具栏**：两行五列，支持删除、光标、空格、清空、提交、切换普通输入法。
-- **限定接管范围**：仅在 VoxKey 输入面板可见且编辑器允许时处理 F5 实体语音键；密码框不录音。其他场景保留原系统语音。
-- Aerial 风格蓝色卡片图标，原生 Java 实现，无 WebView。
+## 当前版本
 
-## 下载
+[**1.1.0-preview.1 统一主线预览版**](https://github.com/jnlpc123/VoxKey/releases/tag/v1.1.0-preview.1)
 
-[**VoxKey 1.0.0 Release**](https://github.com/jnlpc123/VoxKey/releases/tag/v1.0.0)
+一个安装包、一套界面与识别代码，按设备启用对应能力。主线已合并原 Sony 分支和 F5 恢复助手；不再维护独立的应用源码副本。平台按键驱动仍因固件能力不同而有所区别。
 
-`VoxKey-1.0.0-armv7.apk`：可安装包，包含离线模型。源码可直接克隆本仓库，离线模型单独提供为 Release 附件。
+| 设备 | 启用能力 | 验证范围 |
+| --- | --- | --- |
+| 当贝 F5 / Android 9 / ARMv7 | 输入框语音键过滤、内置开机／唤醒恢复 | 前序一体版云端、本地输入和遥控器关机恢复通过；存储优化版模型加载通过；最终统一预览包尚未复测 |
+| Sony BRAVIA 4K GB ATV3 / Android 9 / ARMv7 | 原有 shell/Binder 语音键辅助及本机 ADB 恢复 | 原 1.0.2 已实测，本轮统一预览包待复测 |
+| 其他机型 | 普通输入面板可用性待验证 | 不承诺实体语音键或自动恢复 |
 
-当贝 F5 1.0.0 已在 Android 9、ARMv7 实测。另有 [索尼 1.0.2 专用恢复版](sony/README.md)：保留原系统助手，辅助程序无运行时限，并支持电视本机 ADB 自动恢复；[下载 1.0.2](https://github.com/jnlpc123/VoxKey/releases/tag/v1.0.2)。根目录保留 F5 稳定版源码，索尼版源码见 `sony/`。其他机型未经验证。
+索尼辅助目前限制 Android 8–9（API26–28），Android10及以上不会启动此旧 Binder 接口驱动；其他索尼机型也未验证。本包只包含 ARMv7 原生识别库。索尼辅助仍依赖 shell 权限与本机调试，合并主线不会消除系统权限限制。
 
-## 当贝 F5 关机后输入法回退修复
+用户本轮要求跳过剩余实机测试，故发布为 **Prerelease**。旧版及独立助手的卸载应等最终安装包实测通过后再进行，不能把编译或单元检查当作设备验收。
 
-如果 F5 正常关机再开机后回到搜狗，或 VoxKey 语音键服务被关闭，可安装独立的 [F5 恢复助手](f5-recovery/README.md)。它在开机／唤醒后恢复 VoxKey，保留本次使用中主动切换普通输入法的选择，不修改原桌面。[下载恢复助手 1.0](https://github.com/jnlpc123/VoxKey/releases/tag/f5-recovery-v1.0.0)。这不是索尼版安装包，需先安装 VoxKey 本体。
+## 主要功能
 
-## 使用
+- SenseVoice int8 离线识别，或主动选择百炼 Paraformer-realtime-v2 云端识别。
+- 手机扫码填写北京地域 API Key 与可选 Workspace ID；密钥通过 Android Keystore 加密保存。
+- 两行五列遥控器工具栏：删除、空格、光标、清空、提交、切换普通输入法。
+- 精简界面说明，保留操作、状态和必要错误提示。
+- 直接从 APK 读取离线模型，避免额外保存约 **229 MiB** 的模型副本；已有副本仅在新版引擎成功初始化后清理。模型、识别精度设置保持不变。
 
-1. 安装 APK，在系统设置启用 **VoxKey 输入法**、授予麦克风权限。
-2. 启用 **VoxKey 输入框语音键** 无障碍服务，用于只在输入框内接管实体语音键。
-3. 打开输入框，选择 VoxKey，按住语音键说话，松开识别并填字。
-4. 输入面板的“切换输入法”优先切回已启用的搜狗，否则选择其他普通输入法或打开系统选择器。
+本地失败不会自动上传。仅用户选择云端并发起输入时上传音频，账号费用与额度以百炼控制台为准。扫码配置仅在可信的同一 Wi-Fi 使用；手机提交内容加密，但局域网 HTTP 页面不等于 HTTPS 身份认证。保存或离开页面后配对码失效。
 
-不会自动停用或卸载原桌面、原输入法、系统语音助手。安装后的系统权限需要自行按提示授权。本项目不执行 root 操作。
+## 新安装
 
-## 本地与云端
+下载 `VoxKey-1.1.0-preview.1-armv7.apk`。已安装一体版时可直接覆盖更新；从旧包迁移请先看下一节。
 
-默认保留本地使用能力。本地失败不会自动上传到云端。云端仅在用户主动选择该模式并按住语音键时发送音频，账号额度及费用以百炼控制台为准。
+```sh
+adb install -r VoxKey-1.1.0-preview.1-armv7.apk
+adb shell pm grant app.codex.f5voice.compat.com.android.integrated android.permission.RECORD_AUDIO
+adb shell am start -n app.codex.f5voice.compat.com.android.integrated/.MainActivity
+```
 
-在“识别设置”打开配对页，用连接同一可信 Wi-Fi 的手机扫码，填写北京地域 API Key、可选 Workspace ID，然后保存。配对码10分钟有效，刷新、保存或离开页面立即失效。投影仪使用 Android Keystore 加密存储密钥，不向手机回显已有密钥。
+在系统设置启用并选择 VoxKey 输入法，启用“VoxKey 输入框语音键”无障碍服务。
 
-手机提交内容使用临时 RSA-OAEP/SHA256 + AES-GCM 加密。临时页面由投影仪通过局域网 HTTP 提供，因此仅应在可信网络使用；提交加密不能替代 HTTPS 对页面本身的认证。代码和发布包不包含任何用户 API Key。
+F5 额外授予内置恢复权限，再进入“自动恢复”启用：
+
+```sh
+adb shell pm grant app.codex.f5voice.compat.com.android.integrated android.permission.WRITE_SECURE_SETTINGS
+```
+
+F5 在开机／唤醒时恢复默认输入法；同一次使用中主动切换普通输入法不会立即抢回。电脑无需常连。不会停用原输入法、桌面或系统助手。
+
+索尼进入“语音键辅助”启用恢复；开发者选项中需开启本机 5555 调试端口，并在电视对 VoxKey 本机身份勾选“始终允许”。辅助无运行时限，输入框外释放接管，电脑无需常连。新包 UID 改变，需要重新授权一次；不迁移旧的 ADB 私钥。关闭调试端口、撤销授权或强行停止应用会影响恢复。
+
+## 从旧版迁移
+
+统一包名为 `app.codex.f5voice.compat.com.android.integrated`，保留已在 F5 验证的关机清理兼容身份；它是普通第三方应用，不具有系统签名或系统 UID。旧 F5 / Sony 版本的包名为 `app.codex.f5voice`。
+
+1. 保留旧数据。**Sony 用户先在旧版“辅助状态”暂停辅助，松开所有按键后再迁移**，避免旧辅助进程与新版争用设备。F5 先停用旧独立助手：`adb shell am force-stop app.codex.f5voice.compat.com.android.recovery`。
+2. 安装 `VoxKey-Legacy-Migration-1.0.4.apk` 覆盖旧包，再安装统一包。迁移桥与原发布包同签名，仅保留受保护的本机迁移接口，没有桌面入口、输入法、网络或录音功能；新版设置完成前旧语音输入会暂时不可用。全新安装不需要它。
+3. 打开统一包，等待设置迁移并校验成功。签名权限、精确调用包名和签名校验保护 Binder 迁移；云配置在新 UID 下重新加密，回读确认后标记完成。迁移过程没有文件中转或网络导出，不显示现有密钥。
+4. 配置新版输入法、语音键及所需权限；Sony 重新确认本机调试授权。F5 启用内置自动恢复。
+5. 实体语音输入与正常关机／开机恢复均通过后，才卸载旧包 `app.codex.f5voice` 与旧独立助手 `app.codex.f5voice.compat.com.android.recovery`，最终保留一个 VoxKey。
+
+迁移失败时不要清除旧数据。自编译签名无法读取原发布签名的配置，可通过手机重新配置。原签名私钥、API Key 和本机 ADB 身份不随源码发布。
 
 ## 构建
 
-Windows PowerShell、JDK17、Android SDK Platform35、Build-tools35.0.0。
+Windows PowerShell、JDK17、Android SDK Platform35、Build-tools35.0.0：
 
 ```powershell
 $env:JAVA_HOME = 'C:\Java\jdk-17'
 $env:ANDROID_HOME = 'C:\Android\sdk'
 .\prepare-model.ps1
+.\helper\build.ps1
+Copy-Item .\helper\build\sony-helper.jar .\assets-fast\sony\sony-helper.jar -Force
 .\test.ps1
 .\build.ps1
 ```
 
-Git 仓库不保存约240MB的模型文件；`prepare-model.ps1` 从本项目 v1.0.0 Release 下载固定的模型附件，校验SHA256后只提取模型与词表，并分别复核其SHA256。可离线将同一附件路径传给 `-ArchivePath`。
+模型不进入 Git；准备脚本从本仓库 v1.0.0 Release 下载固定附件并校验模型与词表 SHA256。仓库附带所需依赖、辅助资源和许可证，见 `deps/`、`licenses/`、`helper/`。输出 `build/F5Voice.apk`。默认生成本地开发签名，不能覆盖原发布签名的安装包。
 
-构建产物：`build/F5Voice.apk`。依赖的 JAR 和两个 ARMv7 原生库已包含。没有 Gradle 或云端账号配置要求。
+迁移工具源码位于 `tools/legacy-migration/`，为冻结的升级桥，不是另一条产品开发线。历史独立版本可在 Git 历史及原 Release 获取。
 
-**发布签名私钥未公开。** 自行构建会生成新的本地签名，不能直接覆盖原发布签名安装的版本。内部包名保留 `app.codex.f5voice`，以维持现有输入法、无障碍及密钥身份。
-
-## 1.0 性能与验证
-
-- 清除旧 Zipformer 分支、历史热词路径和无用原生 API 包装库。
-- 进程级共享模型，本地模式提前异步加载；加载回调去重并随界面销毁解除。
-- 本地录音缓冲按需增长，云端采用复用的100ms块；取消的排队识别及时移除并清除PCM。
-- 工具栏复用绘制对象，减少临时分配。
-- F5 最终包三次进程冷加载 **5.411 / 4.502 / 4.627 秒**，中位数 **4.627秒**；旧版单次基线6.592秒。复用已就绪引擎的回调均为0毫秒。
-- 加载优化有取舍：1秒合成音频解码中位数1.403秒，旧版单次1.170秒。后台负载、样本数不同，不代表所有场景均有相同比例的性能变化。
-- 64项自动化检查通过。合成音频不等同于自然语音准确率评测；本轮未重做真人语音、实体遥控和桌面验收。
-
-详见 [验证报告](docs/VERIFICATION.md)。初次解包模型的额外时间不包含在上述已缓存文件的进程冷加载计时中。
-
-## 代码布局
-
-- `src/`：输入法、按键服务、本地/云端识别及手机配对服务。
-- `res/`：原生矢量图标与 Android 配置。
-- `assets-fast/mobile/`：本机提供的手机配置页，无外部CDN。
-- `deps/`：固定版本编译依赖及 ARMv7 JNI/ONNX Runtime。
-- `tests/`：按键、编辑结果策略、导航、云端协议、PCM内存与取消所有权测试。
-- `licenses/`：第三方许可与模型上游说明；模型原始名称及来源保持在说明中。
-
-## 第三方来源
-
-离线模型来自 [csukuangfj/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17](https://huggingface.co/csukuangfj/sherpa-onnx-sense-voice-zh-en-ja-ko-yue-2024-07-17)，上游 [SenseVoice](https://github.com/FunAudioLLM/SenseVoice)。原始模型转换为ORT格式，参数与词表不变。
-
-运行库 [sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)、[ONNX Runtime](https://github.com/microsoft/onnxruntime)，网络 [OkHttp](https://github.com/square/okhttp)，二维码 [ZXing](https://github.com/zxing/zxing)，手机加密 [node-forge](https://github.com/digitalbazaar/forge)。各组件及模型遵循 `licenses/` 中各自的许可，本仓库没有将第三方模型重新许可。
-
+详见 [本轮验证记录](docs/verification-1.1.0-preview.1.md)。

@@ -1,4 +1,4 @@
-package app.codex.f5voice;
+package app.codex.f5voice.compat.com.android.integrated;
 public class TextPolicyTest {
  static int n;
  static void same(String expected,String actual){if(!expected.equals(actual))throw new AssertionError("expected ["+expected+"] but got ["+actual+"]");n++;}

@@ -1,4 +1,4 @@
-param([string]$AssetDirectory='assets-fast',[string]$SdkDirectory=$env:ANDROID_HOME,[string]$JdkDirectory=$env:JAVA_HOME)
+param([string]$AssetDirectory='assets-fast',[string]$SdkDirectory=$env:ANDROID_HOME,[string]$JdkDirectory=$env:JAVA_HOME,[string]$SigningKeyPath)
 $ErrorActionPreference = 'Stop'
 $projectDir = $PSScriptRoot
 if(!$SdkDirectory -or !$JdkDirectory){throw 'Set ANDROID_HOME and JAVA_HOME or pass -SdkDirectory and -JdkDirectory'}
@@ -36,7 +36,7 @@ try {
 } finally { $apkZip.Dispose() }
 & "$buildToolsDir\zipalign.exe" -f 4 "$buildDir\unsigned.apk" "$buildDir\aligned.apk"
 Check-Native
-$keystorePath = "$projectDir\local-signing.jks"
+$keystorePath = if($SigningKeyPath){$SigningKeyPath}else{"$projectDir\local-signing.jks"}
 if (!(Test-Path -LiteralPath $keystorePath)) {
   & "$jdkDir\bin\keytool.exe" -genkeypair -keystore $keystorePath -storepass local-build -keypass local-build -alias f5voice -keyalg RSA -keysize 2048 -validity 10000 -dname 'CN=F5Voice Local Build'
   Check-Native

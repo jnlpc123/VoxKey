@@ -1,3 +1,3 @@
-<input-method xmlns:android="http://schemas.android.com/apk/res/android" android:settingsActivity="app.codex.f5voice.MainActivity" android:supportsSwitchingToNextInputMethod="true">
+<input-method xmlns:android="http://schemas.android.com/apk/res/android" android:settingsActivity="app.codex.f5voice.compat.com.android.integrated.MainActivity" android:supportsSwitchingToNextInputMethod="true">
  <subtype android:label="@string/ime_name" android:imeSubtypeLocale="zh_CN" android:imeSubtypeMode="keyboard"/>
 </input-method>

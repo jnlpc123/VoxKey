@@ -6,6 +6,3 @@ test-build/
 *.apk.idsig
 assets-fast/model/model.int8.ort
 .download-cache/
-
-sony/app/assets-fast/model/
-sony/app/assets-cache/

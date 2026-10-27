@@ -1,4 +1,4 @@
-package app.codex.f5voice;
+package app.codex.f5voice.compat.com.android.integrated;
 public final class AudioBufferTest {
  static int checks;
  static void check(boolean value,String message){if(!value)throw new AssertionError(message);checks++;}
