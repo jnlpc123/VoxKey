@@ -47,3 +47,7 @@ $transportSources=@(Get-ChildItem "$PSScriptRoot\src\com\cgutman\adblib" -Filter
 if($LASTEXITCODE -ne 0){throw 'ADB transport compilation failed'}
 & "$voiceJdk\bin\java.exe" -cp $testDir com.cgutman.adblib.AdbTransportTest
 if($LASTEXITCODE -ne 0){throw 'ADB transport tests failed'}
+& "$voiceJdk\bin\javac.exe" -encoding UTF-8 -d $testDir "$PSScriptRoot\src\app\codex\f5voice\compat\com\android\integrated\DevicePolicy.java" "$PSScriptRoot\src\app\codex\f5voice\compat\com\android\integrated\SetupPolicy.java" "$PSScriptRoot\tests\SetupPolicyTest.java"
+if($LASTEXITCODE -ne 0){throw 'Setup test compilation failed'}
+& "$voiceJdk\bin\java.exe" -cp $testDir app.codex.f5voice.compat.com.android.integrated.SetupPolicyTest
+if($LASTEXITCODE -ne 0){throw 'Setup tests failed'}

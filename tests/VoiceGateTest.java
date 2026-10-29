@@ -23,6 +23,15 @@ public class VoiceGateTest {
   check(g.key(135,false,0,true)==3,"loss of focus still consumes owned release");
   check(g.key(135,true,0,true)==0,"next outside press passes");
   g.editor(true);check(g.key(135,true,1,true)==0,"orphan repeat cannot start");
+  g=new VoiceGate();g.editor(true);check(g.key(231,true,0,true)==1,"voice assist starts");
+  check(g.key(219,false,0,true)==0,"different release passes");
+  check(g.key(231,false,0,true)==2,"voice assist paired release");
+  g=new VoiceGate();g.editor(true);check(g.key(219,true,0,true)==1,"assist starts");check(g.key(219,false,0,true)==2,"assist stops");
+  g=new VoiceGate();g.editor(true);g.configuredCode=231;check(g.key(135,true,0,true)==0,"manual code excludes others");
+  check(g.key(231,true,0,true)==1,"manual code starts");g.configuredCode=135;check(g.key(231,false,0,true)==2,"owned release survives config change");
+  check(g.key(3,true,0,true)==0,"Home passes");check(g.key(4,true,0,true)==0,"back passes");check(g.key(19,true,0,true)==0,"direction passes");
+  g=new VoiceGate();g.editor(false);check(g.key(219,true,0,true)==0,"assistant outside editor passes");
+  g.editor(true);check(g.key(231,true,0,false)==0,"injected assist passes");
   System.out.println("PASS "+n+" session/key checks");
  }
 }

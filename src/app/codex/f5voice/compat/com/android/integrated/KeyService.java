@@ -4,9 +4,13 @@ import android.view.KeyEvent;
 import android.view.accessibility.AccessibilityEvent;
 public final class KeyService extends AccessibilityService {
  static final VoiceGate gate=new VoiceGate();
- @Override public void onServiceConnected(){RecoveryState.start(this);Diag.log("filter_connected");if(!new VoiceSettings(this).cloud())LocalRecognizer.shared().load(this,null);}
+ static boolean connected;
+ static int lastVoiceCode;
+ @Override public void onServiceConnected(){connected=true;RecoveryState.start(this);Diag.log("filter_connected");if(!new VoiceSettings(this).cloud())LocalRecognizer.shared().load(this,null);}
  @Override protected boolean onKeyEvent(KeyEvent e){
-  if(!DeviceProfile.f5())return false;
+  if(gate.active&&e.getDeviceId()>0&&e.getAction()==KeyEvent.ACTION_DOWN&&(e.getKeyCode()==135||e.getKeyCode()==219||e.getKeyCode()==231))lastVoiceCode=e.getKeyCode();
+  if(!CaptureSettings.enabled(this)&&!gate.held)return false;
+  if(!gate.held)gate.configuredCode=CaptureSettings.code(this);
   int action=gate.key(e.getKeyCode(),e.getAction()==KeyEvent.ACTION_DOWN,e.getRepeatCount(),e.getDeviceId()>0);
   if(action==VoiceGate.PASS)return false;
   Diag.log("owned_key action="+e.getAction()+" decision="+action+" generation="+gate.generation);
@@ -16,5 +20,5 @@ public final class KeyService extends AccessibilityService {
  }
  @Override public void onAccessibilityEvent(AccessibilityEvent event){}
  @Override public void onInterrupt(){if(VoiceIme.instance!=null)VoiceIme.instance.cancelVoice();}
- @Override public void onDestroy(){if(VoiceIme.instance!=null)VoiceIme.instance.cancelVoice();gate.editor(false);super.onDestroy();}
+ @Override public void onDestroy(){connected=false;if(VoiceIme.instance!=null)VoiceIme.instance.cancelVoice();gate.editor(false);super.onDestroy();}
 }

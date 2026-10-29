@@ -1,10 +1,15 @@
 param([Parameter(Mandatory=$true)][string]$Device,[string]$Adb='adb')
 $ErrorActionPreference='Stop';$package='app.codex.f5voice.compat.com.android.integrated'
 function Check {if($LASTEXITCODE -ne 0){throw 'ADB command failed'}}
-& $Adb -s $Device install -r --streaming (Join-Path $PSScriptRoot 'VoxKey-1.1.0-preview.1-armv7.apk');Check
+& $Adb -s $Device install -r --streaming (Join-Path $PSScriptRoot 'VoxKey-1.1.0-preview.2-armv7.apk');Check
 & $Adb -s $Device shell pm grant $package android.permission.RECORD_AUDIO;Check
 $model=(& $Adb -s $Device shell getprop ro.product.model);Check
-if($model.Trim() -eq 'DBF5'){
+$brand=(& $Adb -s $Device shell getprop ro.product.brand);Check
+$manufacturer=(& $Adb -s $Device shell getprop ro.product.manufacturer);Check
+$sdkText=(& $Adb -s $Device shell getprop ro.build.version.sdk);Check
+$sdkLevel=0
+[void][int]::TryParse($sdkText.Trim(),[ref]$sdkLevel)
+if($sdkLevel -ge 26 -and ($model.Trim() -eq 'DBF5' -or $brand -match 'dangbei|当贝' -or $manufacturer -match 'dangbei|当贝')){
  & $Adb -s $Device shell pm grant $package android.permission.WRITE_SECURE_SETTINGS;Check
 }
 & $Adb -s $Device shell am start -n "$package/.MainActivity";Check
